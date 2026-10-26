@@ -2,17 +2,27 @@
 
 def render_header():
     st.markdown("""
-        <div style="background-color: #1E3A8A; padding: 15px; border-radius: 8px; margin-bottom: 20px; color: white;">
-            <h2 style="margin: 0; color: white; font-size: 24px;">🔬 ML Virtual Lab Platform</h2>
-            <p style="margin: 0; opacity: 0.9; font-size: 14px;">Interactive Machine Learning Virtual Laboratory — Academic Edition</p>
+        <div style="background-color:#1E3A8A;padding:15px;border-radius:8px;margin-bottom:15px">
+            <h2 style="color:white;margin:0;text-align:center;">🔬 Machine Learning Virtual Laboratory</h2>
+            <p style="color:#E0E7FF;margin:0;text-align:center;font-size:14px;">Interactive Hands-On Environment for Clustering & Quality Evaluation</p>
         </div>
     """, unsafe_allow_html=True)
 
 def render_navigation():
-    cols = st.columns(7)
-    pages = [("🏠 Home", "Home"), ("📋 Overview", "Overview"), ("📚 Pre-Lab", "Pre-Lab"), ("🗺️ Guided Procedure", "Procedure"), ("⚡ Workbench", "Workbench"), ("📊 Analysis & Quiz", "Analysis"), ("📄 Lab Report", "Report")]
-    for idx, (label, page_key) in enumerate(pages):
+    # Only render workspace steps (Home button completely removed)
+    cols = st.columns(5)
+    pages = [
+        ("Overview", "📖 Theory"),
+        ("Pre-Lab", "📚 Pre-Lab"),
+        ("Procedure", "🗺️ Guided Steps"),
+        ("Workbench", "⚡ Workbench"),
+        ("Report", "📄 Final Report")
+    ]
+    
+    for idx, (page_key, display_name) in enumerate(pages):
         with cols[idx]:
-            if st.button(label, use_container_width=True, type="primary" if st.session_state.current_page == page_key else "secondary"):
+            is_active = (st.session_state.current_page == page_key)
+            btn_type = "primary" if is_active else "secondary"
+            if st.button(display_name, key=f"nav_{page_key}", type=btn_type, width="stretch"):
                 st.session_state.current_page = page_key
                 st.rerun()

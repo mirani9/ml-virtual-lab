@@ -16,8 +16,8 @@ st.set_page_config(page_title="ML Virtual Lab — Clustering Analysis", layout="
 
 init_session_state()
 
-# Directly set home page to Overview (Experiment 8 Workspace)
-if st.session_state.current_page == "Home":
+# Enforce default page as Overview
+if st.session_state.current_page in ["Home", None]:
     st.session_state.current_page = "Overview"
 
 render_header()
@@ -26,7 +26,7 @@ st.markdown("---")
 
 if st.session_state.current_page == "Overview":
     st.title("🔬 Machine Learning Virtual Laboratory")
-    st.subheader("Practical 8: Clustering Analysis & Quality Evaluation")
+    st.subheader("Clustering Analysis & Quality Evaluation")
     
     st.markdown("---")
     st.subheader("🎯 Experiment Aim")
@@ -141,7 +141,7 @@ elif st.session_state.current_page == "Workbench":
                 res["X_prep"] = X
                 st.session_state.kmeans_results = res
                 st.session_state.active_run = res
-                add_observation("Exp 8", "K-Means", res["params"], {"silhouette": res["silhouette"], "silhouette_msg": res["silhouette_msg"], "n_clusters": res["n_clusters"], "n_noise": 0})
+                add_observation("Clustering Lab", "K-Means", res["params"], {"silhouette": res["silhouette"], "silhouette_msg": res["silhouette_msg"], "n_clusters": res["n_clusters"], "n_noise": 0})
                 st.rerun()
                 
         elif algo_choice == "EM (GMM)":
@@ -153,7 +153,7 @@ elif st.session_state.current_page == "Workbench":
                 res["X_prep"] = X
                 st.session_state.em_results = res
                 st.session_state.active_run = res
-                add_observation("Exp 8", "EM (GMM)", res["params"], {"silhouette": res["silhouette"], "silhouette_msg": res["silhouette_msg"], "n_clusters": res["n_clusters"], "n_noise": 0})
+                add_observation("Clustering Lab", "EM (GMM)", res["params"], {"silhouette": res["silhouette"], "silhouette_msg": res["silhouette_msg"], "n_clusters": res["n_clusters"], "n_noise": 0})
                 st.rerun()
                 
         elif algo_choice == "DBSCAN":
@@ -166,7 +166,7 @@ elif st.session_state.current_page == "Workbench":
                 res["X_prep"] = X
                 st.session_state.dbscan_results = res
                 st.session_state.active_run = res
-                add_observation("Exp 8", "DBSCAN", res["params"], {"silhouette": res["silhouette"], "silhouette_msg": res["silhouette_msg"], "n_clusters": res["n_clusters"], "n_noise": res["n_noise"]})
+                add_observation("Clustering Lab", "DBSCAN", res["params"], {"silhouette": res["silhouette"], "silhouette_msg": res["silhouette_msg"], "n_clusters": res["n_clusters"], "n_noise": res["n_noise"]})
                 st.rerun()
 
     with viz_col:
@@ -234,7 +234,7 @@ elif st.session_state.current_page == "Workbench":
                     st.download_button(
                         "📥 Export Observations CSV",
                         data=csv_bytes,
-                        file_name=f"Exp8_Observations_{st.session_state.student_id}.csv",
+                        file_name=f"Clustering_Observations_{st.session_state.student_id}.csv",
                         mime="text/csv",
                         width="stretch"
                     )
@@ -305,7 +305,7 @@ elif st.session_state.current_page == "Report":
     st.download_button(
         "Download Formal PDF Report",
         data=pdf_bytes,
-        file_name=f"Exp8_Clustering_Report_{st.session_state.student_id}.pdf",
+        file_name=f"Clustering_Report_{st.session_state.student_id}.pdf",
         mime="application/pdf",
         type="primary"
     )

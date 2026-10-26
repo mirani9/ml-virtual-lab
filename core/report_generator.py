@@ -22,7 +22,7 @@ def generate_pdf_report(session_data: dict) -> bytes:
     
     elements = []
     
-    elements.append(Paragraph("ML VIRTUAL LAB — PRACTICAL REPORT", title_style))
+    elements.append(Paragraph("ML VIRTUAL LAB - PRACTICAL REPORT", title_style))
     elements.append(Spacer(1, 6))
     elements.append(HRFlowable(width="100%", thickness=1.5, color=colors.HexColor('#1E3A8A'), spaceAfter=10))
     
@@ -34,7 +34,7 @@ def generate_pdf_report(session_data: dict) -> bytes:
     meta_data = [
         [Paragraph(f"<b>Student Name:</b> {session_data.get('student_name', 'N/A')}", body_style),
          Paragraph(f"<b>Student ID:</b> {session_data.get('student_id', 'N/A')}", body_style)],
-        [Paragraph("<b>Experiment:</b> Exp 8 — Clustering & Quality Evaluation", body_style),
+        [Paragraph("<b>Experiment:</b> Clustering & Quality Evaluation", body_style),
          Paragraph(f"<b>Completion Status:</b> {completion_status}", body_style)]
     ]
     t_meta = Table(meta_data, colWidths=[270, 270])
