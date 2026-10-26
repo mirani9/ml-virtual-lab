@@ -12,52 +12,48 @@ from lab_modules.exp8_clustering.data_generator import generate_cluster_dataset,
 from lab_modules.exp8_clustering.models import run_kmeans, run_gmm, run_dbscan
 from lab_modules.exp8_clustering.visualizations import plot_cluster_results, plot_comparison_bar
 
-st.set_page_config(page_title="ML Virtual Lab — Academic Platform", layout="wide", page_icon="🔬")
+st.set_page_config(page_title="ML Virtual Lab — Clustering Analysis", layout="wide", page_icon="🔬")
 
 init_session_state()
+
+# Directly set home page to Overview (Experiment 8 Workspace)
+if st.session_state.current_page == "Home":
+    st.session_state.current_page = "Overview"
+
 render_header()
 render_navigation()
 st.markdown("---")
 
-if st.session_state.current_page == "Home":
-    st.title("Welcome to the Machine Learning Virtual Laboratory")
-    st.markdown("This interactive educational laboratory enables students to explore algorithms hands-on without local code execution.")
-    st.subheader("🧪 Laboratory Catalogue")
-    c1, c2, c3 = st.columns(3)
-    with c1:
-        st.info("### Experiment 8\n**Clustering & Quality Evaluation**\n\n- **Methods:** K-Means, EM (GMM), DBSCAN\n- **Status:** 🟢 Operational")
-        if st.button("Enter Practical 8 Workspace", type="primary", width="stretch"):
-            st.session_state.current_page = "Overview"
-            st.rerun()
-    with c2:
-        st.warning("### Experiment 9\n**Supervised Classification**\n\n- **Status:** 🟡 Coming Soon")
-        st.button("Module Locked", disabled=True, key="m9", width="stretch")
-    with c3:
-        st.warning("### Experiment 10\n**Dimensionality Reduction**\n\n- **Status:** 🟡 Coming Soon")
-        st.button("Module Locked", disabled=True, key="m10", width="stretch")
-
-elif st.session_state.current_page == "Overview":
-    st.title("Experiment 8: Clustering Analysis & Quality Evaluation")
+if st.session_state.current_page == "Overview":
+    st.title("🔬 Machine Learning Virtual Laboratory")
+    st.subheader("Practical 8: Clustering Analysis & Quality Evaluation")
+    
+    st.markdown("---")
     st.subheader("🎯 Experiment Aim")
-    st.markdown(f"> {AIM}")
+    st.info(f"**Aim:** {AIM}")
+    
     st.subheader("📌 Learning Objectives")
     for obj in OBJECTIVES:
         st.markdown(f"- {obj}")
+        
+    st.markdown("---")
     st.subheader("📖 Theoretical Foundation")
-    t1, t2, t3 = st.tabs(["K-Means", "EM (GMM)", "DBSCAN"])
+    t1, t2, t3 = st.tabs(["K-Means Clustering", "Expectation Maximization (GMM)", "DBSCAN Density Clustering"])
     with t1:
         st.markdown(THEORY["K-Means"])
     with t2:
         st.markdown(THEORY["EM / GMM"])
     with t3:
         st.markdown(THEORY["DBSCAN"])
-    if st.button("Proceed to Pre-Lab Quiz ➡️", type="primary"):
+        
+    st.markdown("---")
+    if st.button("Proceed to Pre-Lab Readiness Check ➡️", type="primary", width="stretch"):
         st.session_state.current_page = "Pre-Lab"
         st.rerun()
 
 elif st.session_state.current_page == "Pre-Lab":
     st.title("📚 Pre-Lab Readiness Check")
-    st.markdown("Answer these baseline questions before running experiments.")
+    st.markdown("Answer these baseline assessment questions before running experiments on the workbench.")
     
     with st.form("pre_lab_form"):
         user_selections = {}
@@ -86,7 +82,7 @@ elif st.session_state.current_page == "Pre-Lab":
                     st.error(f"❌ Incorrect. {q['explanation']}")
             st.info(f"**Pre-Lab Score: {score} / {len(PRE_LAB_QUIZ)}**")
 
-    if st.button("Proceed to Guided Workbench Procedure ➡️", type="primary"):
+    if st.button("Proceed to Guided Workbench Procedure ➡️", type="primary", width="stretch"):
         st.session_state.current_page = "Procedure"
         st.rerun()
 
@@ -96,7 +92,7 @@ elif st.session_state.current_page == "Procedure":
     curr = PROCEDURE_STEPS[st.session_state.current_step - 1]
     st.subheader(f"Step {curr['step']}: {curr['title']}")
     st.info(curr['desc'])
-    if st.button("Enter Workbench 🔬", type="primary"):
+    if st.button("Enter Experimental Workbench 🔬", type="primary", width="stretch"):
         st.session_state.current_page = "Workbench"
         st.rerun()
 
@@ -283,7 +279,7 @@ elif st.session_state.current_page == "Analysis":
         st.session_state.student_conclusion = user_conc
         st.success("Conclusion saved to report generator!")
         
-    if st.button("Proceed to Generate Report 📄", type="primary"):
+    if st.button("Proceed to Generate Report 📄", type="primary", width="stretch"):
         st.session_state.current_page = "Report"
         st.rerun()
 
