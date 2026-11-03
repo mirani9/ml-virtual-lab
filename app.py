@@ -16,7 +16,6 @@ st.set_page_config(page_title="ML Virtual Lab — Clustering Analysis", layout="
 
 init_session_state()
 
-# Enforce default page as Overview
 if st.session_state.current_page in ["Home", None]:
     st.session_state.current_page = "Overview"
 
@@ -244,19 +243,25 @@ elif st.session_state.current_page == "Workbench":
                         st.rerun()
             else:
                 st.write("No recorded observations.")
+                
+            st.markdown("---")
+            if st.button("Proceed to Post-Lab Assessment & Report ➡️", type="primary", width="stretch"):
+                st.session_state.current_page = "Analysis"
+                st.rerun()
 
 elif st.session_state.current_page == "Analysis":
-    st.title("📊 Analysis & Knowledge Check")
+    st.title("📊 Post-Lab Assessment & Findings")
     
     with st.form("post_lab_form"):
-        st.markdown("### Post-Lab Assessment")
+        st.markdown("### Post-Lab Assessment Quiz")
         post_ans = {}
         for q in POST_LAB_QUIZ:
             st.markdown(f"**{q['question']}**")
             post_ans[q['id']] = st.radio("Select answer:", q['options'], index=0, key=f"post_{q['id']}")
             st.markdown("---")
             
-        if st.form_submit_button("Submit Assessment"):
+        submitted = st.form_submit_button("Submit Post-Lab Assessment")
+        if submitted:
             score = 0
             for q in POST_LAB_QUIZ:
                 user_choice = post_ans[q['id']]
@@ -266,7 +271,7 @@ elif st.session_state.current_page == "Analysis":
             final_pct = round((score / len(POST_LAB_QUIZ)) * 100, 1)
             st.session_state.quiz_score = final_pct
             st.session_state.quiz_attempted = True
-            st.success(f"Assessment Submitted! Score: {final_pct}%")
+            st.success(f"✅ Assessment Submitted! Score: {final_pct}%")
 
     st.markdown("### Experimental Findings & Conclusion")
     auto_conc = generate_auto_conclusion(st.session_state.observations)
@@ -279,7 +284,8 @@ elif st.session_state.current_page == "Analysis":
         st.session_state.student_conclusion = user_conc
         st.success("Conclusion saved to report generator!")
         
-    if st.button("Proceed to Generate Report 📄", type="primary", width="stretch"):
+    st.markdown("---")
+    if st.button("Proceed to Generate PDF Report 📄", type="primary", width="stretch"):
         st.session_state.current_page = "Report"
         st.rerun()
 

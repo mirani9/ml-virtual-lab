@@ -9,14 +9,13 @@ def render_header():
     """, unsafe_allow_html=True)
 
 def render_navigation():
-    # Only render workspace steps (Home button completely removed)
     cols = st.columns(5)
     pages = [
         ("Overview", "📖 Theory"),
         ("Pre-Lab", "📚 Pre-Lab"),
         ("Procedure", "🗺️ Guided Steps"),
         ("Workbench", "⚡ Workbench"),
-        ("Report", "📄 Final Report")
+        ("Analysis", "📊 Post-Test & Report")
     ]
     
     for idx, (page_key, display_name) in enumerate(pages):
