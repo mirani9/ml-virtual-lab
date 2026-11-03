@@ -150,7 +150,7 @@ elif st.session_state.current_page == "Workbench":
                 res = run_gmm(X, n_components=n_comp, covariance_type=cov_type)
                 res["type"] = "EM (GMM)"
                 res["X_prep"] = X
-                res["centroids"] = None  # Explicitly clear centroids for GMM
+                res["centroids"] = None  # Force clear K-Means centroids
                 st.session_state.em_results = res
                 st.session_state.active_run = res
                 add_observation("Clustering Lab", "EM (GMM)", res["params"], {"silhouette": res["silhouette"], "silhouette_msg": res["silhouette_msg"], "n_clusters": res["n_clusters"], "n_noise": 0})
@@ -164,7 +164,7 @@ elif st.session_state.current_page == "Workbench":
                 res = run_dbscan(X, eps=eps_val, min_samples=min_pts, exclude_noise=ex_noise)
                 res["type"] = "DBSCAN"
                 res["X_prep"] = X
-                res["centroids"] = None  # Explicitly clear centroids for DBSCAN
+                res["centroids"] = None  # Force clear K-Means centroids
                 st.session_state.dbscan_results = res
                 st.session_state.active_run = res
                 add_observation("Clustering Lab", "DBSCAN", res["params"], {"silhouette": res["silhouette"], "silhouette_msg": res["silhouette_msg"], "n_clusters": res["n_clusters"], "n_noise": res["n_noise"]})
@@ -184,9 +184,9 @@ elif st.session_state.current_page == "Workbench":
                 
                 fig = plot_cluster_results(plot_X, active["labels"], centroids=c_centers, title=title_str)
                 
-                # Dynamic rendering key forces Streamlit to destroy and recreate the Plotly DOM element
-                dynamic_chart_key = f"chart_{active['type']}_{hash(tuple(active['labels']))}"
-                st.plotly_chart(fig, width="stretch", key=dynamic_chart_key)
+                # Dynamic key forces Streamlit DOM container destruction & redraw
+                plot_hash_key = f"plot_{active['type']}_{hash(tuple(active['labels']))}"
+                st.plotly_chart(fig, width="stretch", key=plot_hash_key)
                 
                 m1, m2 = st.columns(2)
                 m1.metric("Clusters Detected", active["n_clusters"])
@@ -207,7 +207,7 @@ elif st.session_state.current_page == "Workbench":
                 "DBSCAN": st.session_state.get("dbscan_results")
             }
             fig_bar = plot_comparison_bar(comp_dict)
-            st.plotly_chart(fig_bar, width="stretch", key="comparison_bar_chart")
+            st.plotly_chart(fig_bar, width="stretch", key="bar_comparison_chart")
 
         with vtab3:
             st.markdown("#### In-Lab Observations & Historical Inspection")
