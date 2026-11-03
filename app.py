@@ -150,6 +150,7 @@ elif st.session_state.current_page == "Workbench":
                 res = run_gmm(X, n_components=n_comp, covariance_type=cov_type)
                 res["type"] = "EM (GMM)"
                 res["X_prep"] = X
+                res["centroids"] = None
                 st.session_state.em_results = res
                 st.session_state.active_run = res
                 add_observation("Clustering Lab", "EM (GMM)", res["params"], {"silhouette": res["silhouette"], "silhouette_msg": res["silhouette_msg"], "n_clusters": res["n_clusters"], "n_noise": 0})
@@ -163,6 +164,7 @@ elif st.session_state.current_page == "Workbench":
                 res = run_dbscan(X, eps=eps_val, min_samples=min_pts, exclude_noise=ex_noise)
                 res["type"] = "DBSCAN"
                 res["X_prep"] = X
+                res["centroids"] = None
                 st.session_state.dbscan_results = res
                 st.session_state.active_run = res
                 add_observation("Clustering Lab", "DBSCAN", res["params"], {"silhouette": res["silhouette"], "silhouette_msg": res["silhouette_msg"], "n_clusters": res["n_clusters"], "n_noise": res["n_noise"]})
@@ -178,7 +180,7 @@ elif st.session_state.current_page == "Workbench":
             if active and len(active.get("labels", [])) == len(active.get("X_prep", X)):
                 plot_X = active.get("X_prep", X)
                 c_centers = active.get("centroids") if active["type"] == "K-Means" else None
-                title_str = f"Result: {active['type']} (Clusters: {active['n_clusters']})"
+                title_str = f"Result: {active['type']} on {st.session_state.dataset_name} (Clusters: {active['n_clusters']})"
                 fig = plot_cluster_results(plot_X, active["labels"], centroids=c_centers, title=title_str)
                 st.plotly_chart(fig, width="stretch")
                 
@@ -217,7 +219,7 @@ elif st.session_state.current_page == "Workbench":
                                 "type": o["algorithm"],
                                 "X_prep": o["X_prep"],
                                 "labels": o["labels"],
-                                "centroids": o["centroids"],
+                                "centroids": o["centroids"] if o["algorithm"] == "K-Means" else None,
                                 "n_clusters": o["metrics"].get("n_clusters"),
                                 "n_noise": o["metrics"].get("n_noise", 0),
                                 "noise_ratio": 0.0,
